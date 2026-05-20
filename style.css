@@ -101,6 +101,24 @@ main {
     transform: scale(0.96);
 }
 
+.tecla.certo {
+    background: #3B6D11;
+    border-color: #3B6D11;
+    color: white;
+}
+
+.tecla.presente {
+    background: #B59F00;
+    border-color: #B59F00;
+    color: white;
+}
+
+.tecla.ausente {
+    background: #444441;
+    border-color: #444441;
+    color: white;
+}
+
 /* header */
 header {
     width: 100%;

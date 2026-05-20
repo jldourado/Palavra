@@ -25,9 +25,6 @@ function procurarPalavra() {
 
     const indice = Math.floor(Math.random() * PALAVRAS.length);
     jogo.palavraSecreta = PALAVRAS[indice];
-
-    console.log(jogo.palavraSecreta);
-    
 }
 
 /* -----------------INPUT USER----------------- */
