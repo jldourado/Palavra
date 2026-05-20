@@ -1,0 +1,227 @@
+/* design basico */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #F9F7F2;
+    color: #1C1A16;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.tile {
+    width: 56px;
+    height: 56px;
+
+    border: 2px solid #ccc;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        transform 0.1s;
+}
+
+.tile.certo {
+    background: #3B6D11;
+    border-color: #3B6D11;
+    color: white;
+}
+
+.tile.presente {
+    background: #B59F00;
+    border-color: #B59F00;
+    color: white;
+}
+
+.tile.ausente {
+    background: #444441;
+    border-color: #444441;
+    color: white;
+}
+
+.tecla {
+    padding: 14px 8px;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 36px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    background: #f0f0f0;
+    
+    transition:
+        background-color 0.15s,
+        transform 0.05s;
+}
+
+.tecla-especial {
+    min-width: 56px;
+    width: 64px;
+    padding: 14px 4px;
+
+    font-size: 11px;
+    text-align: center;
+}
+
+.tecla:hover {
+    background: #e2e2e2;
+}
+
+.tecla:active{
+    transform: scale(0.96);
+}
+
+/* header */
+header {
+    width: 100%;
+    border-bottom: 1px solid #E2DDD4;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F9F7F2;
+    margin-bottom: 24px;
+    overflow: visible;
+}
+
+/* logotipo */
+.logo {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    overflow: visible;
+    padding: 4px 8px;
+}
+
+.logo-letra {
+    font-family: 'Poppins', sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    color: #1C1A16;
+    line-height: 1;
+    padding: 4px 2px;
+}
+
+.logo-letra.amarelo {
+    border:3px solid #B59F00;
+    color: #B59F00;
+    border-radius: 6px;
+    padding: 4px 6px;
+}
+
+.logo-letra.verde {
+    border:3px solid #3B6D11;
+    color: #3B6D11;
+    border-radius: 6px;
+    padding: 4px 6px;
+}
+
+.logo-v {
+    width: 26px;
+    height: 30px;
+    margin: 0 2px;
+}
+
+
+/* display */
+#display {
+    margin-bottom: 24px;
+}
+
+/* teclado */
+#teclado {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 24px;
+    align-items: center;
+    width: 100%;
+}
+
+
+
+/* botao jogar novamente */
+.botao-reiniciar {
+    padding: 12px 36px;
+    background: #1C1A16;
+    color: white;
+    border: none;
+    border-radius: 24px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s;
+}
+
+/* mensagem */
+#mensagem {
+    border-radius: 10px;
+
+    animation: aparecer 0.3s ease;
+
+    position: fixed;
+    padding: 16px 24px;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-weight: 600;
+    z-index: 999;
+    display: none;
+}
+
+#mensagem.erro {
+    background: #FDECEC;
+    color: #A32D2D;
+    border: 1px solid #F7C1C1;
+}
+
+#mensagem.sucesso {
+    background: #EAF3DE;
+    color: #3B6D11;
+    border: 1px solid #C0DD97;
+}
+
+#mensagem.derrota {
+    background: #F1EFE8;
+    color: #1C1A16;
+    border: 1px solid #E2DDD4;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}

@@ -3,267 +3,48 @@
 <head>
     <meta charset = "UTF-8">
     <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
-    <title>Palavra</title>
-    <style>
-        /* escrever css */
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-            min-height: 100vh;
-            margin: 0;
-        }
 
-    </style>
+    <link rel = "stylesheet" href = "style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
+
+    <title>Palavra</title>
+    
 </head>
 <body>
 
-    <!-- HTML -->
-    <div id = "display"></div>
-    <div id = "teclado"></div>
+    <!-- logotopo -->
+    <header>
+        <div class = "logo">
+            <span class = "logo-letra">P</span>
+            <span class = "logo-letra amarelo">A</span>
+            <span class = "logo-letra">L</span>
+            <span class = "logo-letra verde">A</span>
+            <svg class="logo-v" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="0,0 13,0 20,34 27,0 40,0 23,50 17,50" fill="#1C1A16"/>
+            </svg>
+            <span class = "logo-letra">R</span>
+            <span class = "logo-letra">A</span>
+        </div>
+    </header>
+
+    <main class = "jogo-container">
+
+        <div id = "display"></div>
+        <div id = "teclado"></div>
+        <button id = "reiniciar" class = "botao-reiniciar" onclick = "reiniciarJogo()">Jogar novamente</button>
     
-    <script>
-        /* Def variaveis */
-        let palavraSecreta = '';
-        let linhaActual = 0;
-        let colunaActual = 0;
-        let palpiteActual = [];
-        let FimdoJogo = false;
-
-        /* Procurar palavra a API */
-        async function procurarPalavra() {
-            try {
-                const resposta = await fetch('https://api.datamuse.com/words?sp=?????&v=pt&max=500');
-                const dados = await resposta.json();
-
-                // filtrar palavras com 5 letras e sem acentos 
-                const palavras = dados
-                    .map(w => w.word.toUpperCase())
-                    .filter(w => w.length === 5 && /^[A-ZÁÉÍÓÚÂÊÔÃÕÇ]+$/.test(w));
-                
-                // escolher aleatoriamente
-                palavraSecreta = palavras[Math.floor(Math.random() * palavras.length)];
-                console.log('Palavra escolhida!');
-            } catch (erro) {
-                console.error('Erro ao carregar a palavra:', erro);
-                // backup caso a API falhe
-                const reserva = ["PORTA", "TARDE", "NOITE", "CAMPO", "LINHA"];
-                palavraSecreta = reserva[Math.floor(Math.random() * reserva.length)];
-            }
-        }
-
-        /* Criar a grelha */
-        function criarDisplay()
-        {
-            const display = document.getElementById('display');
-            for (let linha = 0; linha < 6; linha++)
-            {
-                const row = document.createElement('div');
-                row.style.cssText = 'display:flex; gap:6px; margin-bottom:6px;';
-                for(let col = 0; col < 5; col++)
-                {
-                    const tile = document.createElement('div');
-                    tile.id = `tile-${linha}-${col}`;
-                    tile.style.cssText = 'width:56px; height:56px; border:2px solid #ccc; align-items:center; display: flex; justify-content:center; font-size:24px; font-weight:bold; font-family: Poppins, sans-serif;';
-                    row.appendChild(tile);
-                }
-                display.appendChild(row);
-            }
-        }
-
-        /* Criar a logica */
-        function verificarPalpite(secreta, palpite)
-        {
-            const resultado = Array(5).fill('vazio');
-            const letraSecreta = [...secreta];
-            const letraPalpite = [...palpite];
-
-            // 1º verificar letras certas e no lugar certo
-            for (let i = 0; i < 5; i++)
-            {
-                if (letraPalpite[i] === letraSecreta[i])
-                {
-                    resultado[i] = 'certo';
-                    letraSecreta[i] = null;
-                    letraPalpite[i] = null;
-                }
-            }
-
-            // 2º verificar letras certas no lugar errado
-            for(let i = 0; i < 5; i++)
-            {
-                if (!letraPalpite[i]) continue;
-                const id = letraSecreta.indexOf(letraPalpite[i]);
-                if (id !== -1)
-                {
-                    resultado[i] = 'presente';
-                    letraSecreta[id] = null;
-                }
-            }
-
-            return resultado;
-        }
-
-        // usar cores
-        function submeterPalpite()
-        {
-            if (colunaActual < 5)
-            {
-                alert('Palavra incompleta!');
-                return;
-            }
-            const palpite = palpiteActual.join('');
-            const resultado = verificarPalpite(palavraSecreta, palpite);
-
-            const cores = {
-                'certo': '#3B6D11',  // verde
-                'presente': '#B59F00',  // laranja
-                'vazio':  '#444441'   // cinza
-            };
-
-            resultado.forEach((estado, i) => {
-                const tile = document.getElementById(`tile-${linhaActual}-${i}`);
-                tile.style.backgroundColor = cores[estado];
-                tile.style.color = 'white';
-                tile.style.borderColor = cores[estado];
-            });
-            actualizarTeclado(palpite, resultado);
-
-            // verificar se acertou
-            if(palpite === palavraSecreta) {
-                setTimeout(() => alert(`Parabéns! Acertaste em ${linhaActual + 1} tentativa(s).`), 300);
-                FimdoJogo = true;
-                return;
-            }
-
-            // avançar na linha
-            linhaActual++;
-            colunaActual = 0;
-            palpiteActual = [];
-
-            // verificar se perdeu
-            if(linhaActual >= 6)
-            {
-                setTimeout(() => alert(`Perdeste! A palavra era: ${palavraSecreta}`), 300);
-                FimdoJogo = true;
-            }
-        }
-
-        /* Criar input */
-        function addLetra(letra)
-        {
-            if (colunaActual >= 5 || FimdoJogo) return;
-            document.getElementById(`tile-${linhaActual}-${colunaActual}`).textContent = letra;
-            palpiteActual.push(letra);
-            colunaActual++;
-        }
-
-        function apagarLetra(letra)
-        {
-            if(colunaActual <= 0 || FimdoJogo) return;
-            colunaActual--;
-            document.getElementById(`tile-${linhaActual}-${colunaActual}`).textContent = '';
-            palpiteActual.pop();
-        }
-
-        /* Criar teclado */
-        function criarTeclado() 
-        {
-            const linhasTeclado = [
-                ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-                ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-                ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫']
-            ];
-
-            const teclado = document.getElementById('teclado');
-            teclado.style.cssText = 'display: flex; flex-direction:column; gap:6px; margin-top:16px;';
-
-            linhasTeclado.forEach(linha => {
-                const row = document.createElement('div');
-                row.style.cssText = 'display:flex; gap: 4px; justify-content:center;';
-
-                linha.forEach(tecla => {
-                    const btn = document.createElement('button');
-                    btn.id = `tecla-${tecla}`;
-                    btn.textContent = tecla;
-                    btn.style.cssText = `
-                        padding: 14px 8px;
-                        min-width: ${tecla === 'ENTER' || tecla === '⌫' ? '56px' : '36px'};
-                        border: 1px solid #ccc;
-                        border-radius: 6px;
-                        font-size: 13px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        background: #f0f0f0;
-                        color: #000;
-                    `;
-                    btn.onclick = () => {
-                        if (tecla === 'ENTER') submeterPalpite();
-                        else if (tecla === '⌫') apagarLetra();
-                        else addLetra(tecla);
-                    };
-                    row.appendChild(btn);
-                });
-
-                teclado.appendChild(row);
-            });
-
-        }
-
-        // cores teclado
-        function actualizarTeclado(palpite, resultado)
-        {
-            const prioridade = {'certo': 3, 'presente': 2, 'vazio': 1};
-            const cores = {
-                'certo': '#3B6D11',  // verde
-                'presente': '#B59F00',  // amarelo
-                'vazio':  '#444441'   // cinza
-            };
-
-            [...palpite].forEach((letra, i) => {
-                const btn = document.getElementById(`tecla-${letra}`);
-                if (!btn) return;
-
-                //so actualiza se o novo estado tiver prioridade
-                const estadoActual = btn.dataset.estado || '';
-                const prioActual = prioridade[estadoActual] || 0;
-                const prioNovo = prioridade[resultado[i]] || 0;
-
-                if (prioNovo > prioActual) {
-                    btn.style.backgroundColor = cores[resultado[i]];
-                    btn.style.color = 'white';
-                    btn.style.borderColor = cores[resultado[i]];
-                    btn.dataset.estado = resultado[i];
-                }
-
-            });
-        }
-
-
-        /* Iniciar jogo */
-        document.addEventListener('keydown', (e) => {
-            const tecla = e.key.toUpperCase();
-
-            if (tecla === 'ENTER') {
-                submeterPalpite();
-            } else if (tecla === 'BACKSPACE') {
-                apagarLetra();
-            } else if (/^[A-ZÁÉÍÓÚÂÊÔÃÕÇ]$/.test(tecla)) {
-                addLetra(tecla);
-            }
-        });
-
-        async function iniciarJogo() {
-            await procurarPalavra();
-            criarDisplay();
-            criarTeclado();
-        }
-
-        iniciarJogo();
-
-    </script>
+    </main>
+    
+    <div id = "mensagem"></div>
+    <script src = "palavras.js"></script>
+    <script src = "ui.js"></script>
+    <script src = "jogo.js"></script>
 
 </body>
 </html>
+
+
+
 
