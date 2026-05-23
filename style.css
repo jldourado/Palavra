@@ -203,6 +203,71 @@ header {
     transition: opacity 0.2s;
 }
 
+/* botao dificuldade */
+#menu-dificuldade h2 {
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  font-size: 2rem;
+  color: #1f1f1f;
+}
+
+/* Container dos botões */
+.botoes-dificuldade {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Botões */
+.botoes-dificuldade button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+
+  transition: all 0.2s ease;
+  transform: translateY(0);
+
+  color: #f5f5f5;
+  background: linear-gradient(180deg, #3a342d 0%, #2a2520 100%);
+
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.25),
+    inset 0 1px 1px rgba(255,255,255,0.08);
+}
+
+/* Hover */
+.botoes-dificuldade button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #4a433a 0%, #332d27 100%);
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.35),
+    inset 0 1px 1px rgba(255,255,255,0.08);
+}
+
+/* Clique */
+.botoes-dificuldade button:active {
+  transform: scale(0.97);
+}
+
+/* Botão ativo */
+.botoes-dificuldade button.ativo {
+  background: linear-gradient(180deg, #ffb347 0%, #ff8c42 100%);
+  color: #1a1a1a;
+
+  box-shadow:
+    0 0 0 2px rgba(255,180,71,0.35),
+    0 8px 18px rgba(255,140,66,0.35);
+}
+
 /* mensagem */
 #mensagem {
     border-radius: 10px;

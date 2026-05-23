@@ -5,26 +5,47 @@ const jogo = {
     colunaActual: 0,
     palpiteActual: [],
     letra: '',
-    FimdoJogo: false
+    FimdoJogo: false,
+    dificuldade: 'dificil',
+    palavras: [] // lista vazia
 };
 
 let timeoutMensagem;
 
+function iniciarComDificuldade(dificuldade) {
+    jogo.dificuldade = dificuldade;
+    jogo.palavras = dificuldade === 'facil' ? PALAVRAS_FACIL : PALAVRAS_DIFICIL;
+
+    // esconder o menu para começar o jogo
+    document.getElementById('menu-dificuldade').style.display = 'none';
+    document.getElementById('jogo').style.display = 'flex';
+
+    iniciarJogo();
+}
 /* -----------------INICIAR O JOGO----------------- */
 
 function iniciarJogo() 
 {
     procurarPalavra();
+
+    // limpar antigo
+    document.getElementById('display').innerHTML = '';
+    document.getElementById('teclado').innerHTML = '';
+    document.getElementById('mensagem').innerHTML = '';
+
     criarDisplay();
     criarTeclado();
+
+    document.getElementById('reiniciar').style.display = 'block';
 }
 
 /* -----------------ESCOLHER PALAVRA----------------- */
 
 function procurarPalavra() {
 
-    const indice = Math.floor(Math.random() * PALAVRAS.length);
-    jogo.palavraSecreta = PALAVRAS[indice];
+    const indice = Math.floor(Math.random() * jogo.palavras.length);
+    jogo.palavraSecreta = jogo.palavras[indice];
+
 }
 
 /* -----------------INPUT USER----------------- */
@@ -89,7 +110,7 @@ function submeterPalpite()
     }
     const palpite = jogo.palpiteActual.join('');
 
-    if (!PALAVRAS.includes(palpite)) 
+    if (!jogo.palavras.includes(palpite)) 
     {
         mostrarMensagem('Palavra não existe!', 'erro', 2000);
         return;
@@ -183,6 +204,10 @@ function reiniciarJogo()
     document.getElementById('display').innerHTML = '';
     document.getElementById('teclado').innerHTML = '';
     document.getElementById('reiniciar').style.display = 'none';
+    document.getElementById('mensagem').style.display = 'none';
+
+    document.getElementById('menu-dificuldade').style.display = 'block';
+    document.getElementById('jogo').style.display = 'none';
 
     iniciarJogo();
 
@@ -214,5 +239,4 @@ function addEventos()
 
 /* ----------------- INICIAR ----------------- */
 
-iniciarJogo();
 addEventos();

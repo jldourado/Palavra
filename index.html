@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
 
+    <script src = "palavras-facil.js"></script>
+    <script src = "palavras.js"></script>
+
     <title>Palavra</title>
     
 </head>
@@ -29,11 +32,26 @@
         </div>
     </header>
 
-    <main class = "jogo-container">
+    <div id = "menu-dificuldade">
+        <h2>Escolhe a dificuldade</h2>
+        <div class="botoes-dificuldade">
+            <button type = "button" onclick="iniciarComDificuldade('facil')">
+                😊 Fácil
+                <span>-> Verbos comuns</span>
+            </button>
+            <button type="button" onclick="iniciarComDificuldade('dificil')">
+                💀 Difícil
+                <span>-> Todas as palavras</span>
+            </button>
+        </div>
+    </div>
+
+    <main class = "jogo-container" id = "jogo" style = "display:none;">
 
         <div id = "display"></div>
+        <div id = "mensagem"></div>
         <div id = "teclado"></div>
-        <button id = "reiniciar" class = "botao-reiniciar" onclick = "reiniciarJogo()">Jogar novamente</button>
+        <button id = "reiniciar" class = "botao-reiniciar" type = "button" onClick = "reiniciarJogo()">Jogar novamente</button>
     
     </main>
     
